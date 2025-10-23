@@ -31,27 +31,31 @@ class PaketWisataController extends Controller
 
     public function updatekonten(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-            'deskripsi' => 'nullable|string',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+                'deskripsi' => 'nullable|string',
+            ]);
 
-        $backgroundPath = null;
+            $backgroundPath = null;
 
-        if ($request->hasFile('background')) {
-            $filename = time() . '.' . $request->background->extension();
-            $request->background->move(public_path('uploads/paketwisata'), $filename);
-            $backgroundPath = 'uploads/paketwisata/' . $filename;
+            if ($request->hasFile('background')) {
+                $filename = time() . '.' . $request->background->extension();
+                $request->background->move(public_path('uploads/paketwisata'), $filename);
+                $backgroundPath = 'uploads/paketwisata/' . $filename;
+            }
+
+            PaketWisata::query()->update([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'background' => $backgroundPath,
+            ]);
+            return redirect()->route('paketwisata.index')->with('success', 'Tampilan berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        PaketWisata::query()->update([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'background' => $backgroundPath,
-        ]);
-
-        return redirect()->route('paketwisata.index')->with('success', 'Tampilan berhasil diperbarui');
     }
 
     public function create()
@@ -62,30 +66,34 @@ class PaketWisataController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'cardTitle' => 'required|string|max:255',
-            'harga'  => 'required|numeric|min:0',
-            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'deskripsi' => 'nullable|string',
+                'cardTitle' => 'required|string|max:255',
+                'harga'  => 'nullable|string|max:255',
+                'gambar' => 'required|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        $gambarPath = null;
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/paketwisata'), $filename);
-            $gambarPath = 'uploads/paketwisata/' . $filename;
+            $gambarPath = null;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/paketwisata'), $filename);
+                $gambarPath = 'uploads/paketwisata/' . $filename;
+            }
+
+            PaketWisata::create([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'cardTitle' => $request->cardTitle,
+                'harga' => $request->harga,
+                'gambar' => $gambarPath,
+            ]);
+            return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil ditambahkan');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        PaketWisata::create([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'cardTitle' => $request->cardTitle,
-            'harga' => $request->harga,
-            'gambar' => $gambarPath,
-        ]);
-
-        return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil ditambahkan');
     }
 
     public function edit(PaketWisata $paketwisata)
@@ -96,34 +104,43 @@ class PaketWisataController extends Controller
 
     public function update(Request $request, PaketWisata $paketwisata)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'cardTitle' => 'required|string|max:255',
-            'harga'  => 'required|numeric|min:0',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'deskripsi' => 'nullable|string',
+                'cardTitle' => 'required|string|max:255',
+                'harga'  => 'nullable|string|max:255',
+                'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/paketwisata'), $filename);
-            $paketwisata->gambar = 'uploads/paketwisata/' . $filename;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/paketwisata'), $filename);
+                $paketwisata->gambar = 'uploads/paketwisata/' . $filename;
+            }
+
+            $paketwisata->update([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'cardTitle' => $request->cardTitle,
+                'harga' => $request->harga,
+                'gambar' => $paketwisata->gambar,
+            ]);
+            return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $paketwisata->update([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'cardTitle' => $request->cardTitle,
-            'harga' => $request->harga,
-            'gambar' => $paketwisata->gambar,
-        ]);
-
-        return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil diperbarui');
     }
 
     public function destroy(PaketWisata $paketwisata)
     {
-        $paketwisata->delete();
-        return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil dihapus');
+        try {
+            $paketwisata->delete();
+            return redirect()->route('paketwisata.index')->with('success', 'paket wisata berhasil dihapus');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

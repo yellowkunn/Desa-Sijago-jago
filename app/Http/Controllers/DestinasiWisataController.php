@@ -25,25 +25,30 @@ class DestinasiWisataController extends Controller
 
     public function updatewisata(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        $backgroundPath = null;
+            $backgroundPath = null;
 
-        if ($request->hasFile('background')) {
-            $filename = time() . '.' . $request->background->extension();
-            $request->background->move(public_path('uploads/wisata'), $filename);
-            $backgroundPath = 'uploads/wisata/' . $filename;
+            if ($request->hasFile('background')) {
+                $filename = time() . '.' . $request->background->extension();
+                $request->background->move(public_path('uploads/wisata'), $filename);
+                $backgroundPath = 'uploads/wisata/' . $filename;
+            }
+
+            DestinasiWisata::query()->update([
+                'title' => $request->title,
+                'background' => $backgroundPath,
+            ]);
+
+            return redirect()->route('wisata.index')->with('success', 'Tampilan wisata berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        DestinasiWisata::query()->update([
-            'title' => $request->title,
-            'background' => $backgroundPath,
-        ]);
-
-        return redirect()->route('wisata.index')->with('success', 'Semua tampilan wisata berhasil diperbarui');
     }
 
     public function create()
@@ -53,29 +58,34 @@ class DestinasiWisataController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-            'cardTitle' => 'required|string|max:255',
-            'cardContent' => 'required|string',
-            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:10240',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+                'cardTitle' => 'required|string|max:255',
+                'cardContent' => 'required|string',
+                'gambar' => 'required|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        $gambarPath = null;
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/wisata'), $filename);
-            $gambarPath = 'uploads/wisata/' . $filename;
+            $gambarPath = null;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/wisata'), $filename);
+                $gambarPath = 'uploads/wisata/' . $filename;
+            }
+
+            DestinasiWisata::create([
+                'title' => $request->title,
+                'cardTitle' => $request->cardTitle,
+                'cardContent' => $request->cardContent,
+                'gambar' => $gambarPath,
+            ]);
+
+            return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil ditambahkan');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        DestinasiWisata::create([
-            'title' => $request->title,
-            'cardTitle' => $request->cardTitle,
-            'cardContent' => $request->cardContent,
-            'gambar' => $gambarPath,
-        ]);
-
-        return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil ditambahkan');
     }
 
     public function edit(DestinasiWisata $wisatum)
@@ -85,32 +95,42 @@ class DestinasiWisataController extends Controller
 
     public function update(Request $request, DestinasiWisata $wisatum)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'cardTitle' => 'required|string|max:255',
-            'cardContent' => 'required|string',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'cardTitle' => 'required|string|max:255',
+                'cardContent' => 'required|string',
+                'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/wisata'), $filename);
-            $wisatum->gambar = 'uploads/wisata/' . $filename;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/wisata'), $filename);
+                $wisatum->gambar = 'uploads/wisata/' . $filename;
+            }
+
+            $wisatum->update([
+                'title' => $request->title,
+                'cardTitle' => $request->cardTitle,
+                'cardContent' => $request->cardContent,
+                'gambar' => $wisatum->gambar,
+            ]);
+
+            return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $wisatum->update([
-            'title' => $request->title,
-            'cardTitle' => $request->cardTitle,
-            'cardContent' => $request->cardContent,
-            'gambar' => $wisatum->gambar,
-        ]);
-
-        return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil diperbarui');
     }
 
     public function destroy(DestinasiWisata $wisatum)
     {
-        $wisatum->delete();
-        return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil dihapus');
+        try {
+            $wisatum->delete();
+            return redirect()->route('wisata.index')->with('success', 'Destinasi wisata berhasil dihapus');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

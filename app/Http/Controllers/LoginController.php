@@ -12,33 +12,40 @@ class LoginController extends Controller
         return view('login.login');
     }
 
-    // proses login
     public function login(Request $request)
     {
-        $credentials = $request->validate([
-            'name' => ['required', 'string'],
-            'password' => ['required', 'string'],
-        ]);
+        try {
+            $credentials = $request->validate([
+                'name' => ['required', 'string'],
+                'password' => ['required', 'string'],
+            ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return redirect()->intended('/admin/dashboard');
+            }
 
-            return redirect()->intended('/admin/dashboard');
+            return back()->withErrors([
+                'loginError' => 'Username atau password salah.'
+            ])->onlyInput('name');
+        } catch (\Exception $e) {
+            return back()->withErrors([
+                'loginError' => 'Terjadi kesalahan sistem. Silakan coba lagi nanti.'
+            ]);
         }
-
-        return back()->withErrors([
-            'loginError' => 'Username atau password salah.'
-        ])->onlyInput('name');
     }
 
-    // logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        try {
+            Auth::logout();
 
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
-        return redirect('/login');
+            return redirect('/login')->with('success', 'Berhasil logout.');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan saat logout. Silakan coba lagi.');
+        }
     }
 }

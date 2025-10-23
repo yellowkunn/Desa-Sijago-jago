@@ -14,9 +14,9 @@
         <div class="hidden lg:block lg:w-2/3 bg-cover" style="background-image: url('{{ asset('images/bg1.jpg') }}');">
             <div class="flex items-center h-full px-20 bg-gray-900 bg-opacity-40">
                 <div>
-                    <h2 class="text-4xl font-bold text-white">Desa Sijago-jago</h2>
+                    <h2 class="text-4xl font-bold text-white">Desa Jago-jago</h2>
                     <p class="max-w-xl mt-3 text-gray-300">
-                        Masuk sebagai admin untuk dapat melakukan perubahan tampilan website Desa Sijago-jago
+                        Masuk sebagai admin untuk dapat melakukan perubahan tampilan website Desa Jago-jago
                     </p>
                 </div>
             </div>

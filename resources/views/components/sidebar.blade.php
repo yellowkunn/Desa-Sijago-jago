@@ -98,9 +98,9 @@
             </li>
             <ul class="mt-4 font-medium border-t border-gray-300 pt-6">
                 <li>
-                    <form action="{{ route('logout') }}" method="POST">
+                    <form id="logoutForm" action="{{ route('logout') }}" method="POST">
                         @csrf
-                        <button type="submit"
+                        <button type="button" id="logoutBtn"
                             class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 hover:text-red-600">
                             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor"
                                 viewBox="0 0 24 24">
@@ -115,9 +115,29 @@
                             <span class="ms-3">Keluar</span>
                         </button>
                     </form>
-
                 </li>
             </ul>
         </ul>
     </div>
 </aside>
+            <script>
+                document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    Swal.fire({
+                        title: "Yakin ingin keluar?",
+                        text: "Kamu akan logout dari akun ini.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#2563EB",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Ya, keluar!",
+                        cancelButtonText: "Batal"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // kirim form logout
+                            document.getElementById('logoutForm').submit();
+                        }
+                    });
+                });
+            </script>

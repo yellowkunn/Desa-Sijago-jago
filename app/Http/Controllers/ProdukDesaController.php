@@ -27,28 +27,39 @@ class ProdukDesaController extends Controller
 
     public function updatekonten(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
-            'deskripsi' => 'nullable|string',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'background' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+                'deskripsi' => 'nullable|string',
+            ]);
 
-        $backgroundPath = null;
+            $backgroundPath = null;
 
-        if ($request->hasFile('background')) {
-            $filename = time() . '.' . $request->background->extension();
-            $request->background->move(public_path('uploads/produkdesa'), $filename);
-            $backgroundPath = 'uploads/produkdesa/' . $filename;
+            if ($request->hasFile('background')) {
+                $filename = time() . '.' . $request->background->extension();
+                $request->background->move(public_path('uploads/produkdesa'), $filename);
+                $backgroundPath = 'uploads/produkdesa/' . $filename;
+            }
+
+
+            ProdukDesa::query()->update([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'background' => $backgroundPath,
+            ]);
+            return redirect()->route('produkdesa.index')->with('success', 'Tampilan berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
 
+        try {
+            return redirect()->route('paketwisata.index')->with('success', 'Tampilan berhasil diperbarui');
+        } catch (\Exception $e) {
 
-        ProdukDesa::query()->update([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'background' => $backgroundPath,
-        ]);
-
-        return redirect()->route('produkdesa.index')->with('success', 'Tampilan berhasil diperbarui');
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 
     public function create()
@@ -59,28 +70,32 @@ class ProdukDesaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'cardTitle' => 'required|string|max:255',
-            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'deskripsi' => 'nullable|string',
+                'cardTitle' => 'required|string|max:255',
+                'gambar' => 'required|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        $gambarPath = null;
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/produkdesa'), $filename);
-            $gambarPath = 'uploads/produkdesa/' . $filename;
+            $gambarPath = null;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/produkdesa'), $filename);
+                $gambarPath = 'uploads/produkdesa/' . $filename;
+            }
+
+            ProdukDesa::create([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'cardTitle' => $request->cardTitle,
+                'gambar' => $gambarPath,
+            ]);
+            return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil ditambahkan');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        ProdukDesa::create([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'cardTitle' => $request->cardTitle,
-            'gambar' => $gambarPath,
-        ]);
-
-        return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil ditambahkan');
     }
 
     public function edit(ProdukDesa $produkdesa)
@@ -91,32 +106,41 @@ class ProdukDesaController extends Controller
 
     public function update(Request $request, ProdukDesa $produkdesa)
     {
-        $request->validate([
-            'title' => 'nullable|string|max:255',
-            'deskripsi' => 'nullable|string',
-            'cardTitle' => 'required|string|max:255',
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-        ]);
+        try {
+            $request->validate([
+                'title' => 'nullable|string|max:255',
+                'deskripsi' => 'nullable|string',
+                'cardTitle' => 'required|string|max:255',
+                'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
+            ]);
 
-        if ($request->hasFile('gambar')) {
-            $filename = time() . '.' . $request->gambar->extension();
-            $request->gambar->move(public_path('uploads/produkdesa'), $filename);
-            $produkdesa->gambar = 'uploads/produkdesa/' . $filename;
+            if ($request->hasFile('gambar')) {
+                $filename = time() . '.' . $request->gambar->extension();
+                $request->gambar->move(public_path('uploads/produkdesa'), $filename);
+                $produkdesa->gambar = 'uploads/produkdesa/' . $filename;
+            }
+
+            $produkdesa->update([
+                'title' => $request->title,
+                'deskripsi' => $request->deskripsi,
+                'cardTitle' => $request->cardTitle,
+                'gambar' => $produkdesa->gambar,
+            ]);
+            return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil diperbarui');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-
-        $produkdesa->update([
-            'title' => $request->title,
-            'deskripsi' => $request->deskripsi,
-            'cardTitle' => $request->cardTitle,
-            'gambar' => $produkdesa->gambar,
-        ]);
-
-        return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil diperbarui');
     }
 
     public function destroy(ProdukDesa $produkdesa)
     {
-        $produkdesa->delete();
-        return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil dihapus');
+        try {
+            $produkdesa->delete();
+            return redirect()->route('produkdesa.index')->with('success', 'produk desa berhasil dihapus');
+        } catch (\Exception $e) {
+
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
     }
 }

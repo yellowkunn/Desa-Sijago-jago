@@ -1,5 +1,17 @@
 @extends('../components.mainadmin')
 @section('container')
+    <div class="sm:ml-64">
+        @if (session('success'))
+            <div class="bg-green-100 text-green-700 p-4 mb-4 rounded-lg">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class=" bg-red-100 text-red-700 p-4 mb-4 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
+    </div>
     <div class="max-w-3xl mx-auto py-12 px-6">
         <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit Tampilan Destinasi Wisata</h1>
 

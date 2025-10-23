@@ -6,6 +6,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if (session('error'))
+            <div class=" bg-red-100 text-red-700 p-4 mb-4 rounded-lg">
+                {{ session('error') }}
+            </div>
+        @endif
 
         {{-- HERO SECTION --}}
         <div class="w-full h-[45vh] lg:h-[90vh] relative overflow-hidden">
@@ -30,7 +35,7 @@
         </div>
 
         {{-- TENTANG SECTION --}}
-        <div class="lg:pt-[150px] pt-12">
+        <div class="lg:pt-[150px]">
             <div class="max-w-7xl mx-auto px-4 sm:px-0 md:px-8 2xl:px-0">
 
                 {{-- Tombol Edit Section --}}
@@ -53,7 +58,7 @@
 
                 {{-- Konten Tentang --}}
                 <div class="flex flex-wrap xl:justify-between justify-center gap-y-7">
-                    <div class="2xl:max-w-3xl xl:max-w-xl max-w-full bg-white rounded-lg shadow-sm content-center p-6">
+                    <div class="2xl:max-w-3xl xl:max-w-xl max-w-full bg-white rounded-lg content-center p-6">
                         <h5 class="mb-2 text-xs lg:text-2xl font-normal text-center tracking-tight text-black">
                             {{ $tentang->title1 }}
                         </h5>
@@ -93,55 +98,55 @@
             </div>
         </div>
 
- @php
-        $count = $wisataRow1->count();
-    @endphp
+        @php
+            $count = $wisataRow1->count();
+        @endphp
 
-    @if ($count === 1)
-        <div class="lg:pt-[65px] pt-[20px]">
-            <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0">
-                @foreach ($wisataRow1 as $item)
-                    <img class="w-full h-[250px] lg:h-[400px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
-                        src="{{ asset($item->gambar) }}" alt="{{ $item->cardTitle }}">
-                @endforeach
-            </div>
-        </div>
-    @elseif ($count < 3)
-        <div class="lg:pt-[65px] pt-[20px]">
-            <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
-                    @forelse ($wisataRow1 as $item)
-                        <img class="w-full h-[180px] md:h-[250px] lg:h-[320px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
+        @if ($count === 1)
+            <div class="lg:pt-[65px] pt-[20px]">
+                <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0">
+                    @foreach ($wisataRow1 as $item)
+                        <img class="w-full h-[250px] lg:h-[400px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
                             src="{{ asset($item->gambar) }}" alt="{{ $item->cardTitle }}">
-                    @empty
-                        <p class="text-gray-500 col-span-2">Belum ada destinasi wisata.</p>
-                    @endforelse
+                    @endforeach
                 </div>
             </div>
-        </div>
-    @else
-        <div class="lg:pt-[65px] pt-[20px]">
-            <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0 space-y-5 lg:space-y-20">
-
-                <!-- Row 1 -->
-                <div class="flex justify-between items-center flex-wrap gap-4">
-                    @forelse ($wisataRow1 as $item)
-                        <img class="h-[150px] w-[105px] md:h-[228px] md:w-[205px] lg:h-[300px] lg:w-[270px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
-                            src="{{ asset($item->gambar) }}" alt="{{ $item->cardTitle }}">
-                    @empty
-                        <p class="text-gray-500">Belum ada destinasi wisata.</p>
-                    @endforelse
+        @elseif ($count < 3)
+            <div class="lg:pt-[65px] pt-[20px]">
+                <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 lg:gap-8">
+                        @forelse ($wisataRow1 as $item)
+                            <img class="w-full h-[180px] md:h-[250px] lg:h-[320px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
+                                src="{{ asset($item->gambar) }}" alt="{{ $item->cardTitle }}">
+                        @empty
+                            <p class="text-gray-500 col-span-2">Belum ada destinasi wisata.</p>
+                        @endforelse
+                    </div>
                 </div>
-
-                <!-- Row 2 -->
-                @if (!empty($wisataRow2?->gambar))
-                    <img class="h-[150px] lg:h-[300px] w-full object-cover shadow-lg rounded-lg lg:rounded-2xl"
-                        src="{{ asset($wisataRow2->gambar) }}" alt="{{ $wisataRow2->cardTitle }}">
-                @endif
-
             </div>
-        </div>
-    @endif
+        @else
+            <div class="lg:pt-[65px] pt-[20px]">
+                <div class="max-w-7xl mx-auto px-4 md:px-8 2xl:px-0 space-y-5 lg:space-y-20">
+
+                    <!-- Row 1 -->
+                    <div class="flex justify-between items-center flex-wrap gap-4">
+                        @forelse ($wisataRow1 as $item)
+                            <img class="h-[150px] w-[105px] md:h-[228px] md:w-[205px] lg:h-[300px] lg:w-[270px] object-cover shadow-lg rounded-lg lg:rounded-2xl"
+                                src="{{ asset($item->gambar) }}" alt="{{ $item->cardTitle }}">
+                        @empty
+                            <p class="text-gray-500">Belum ada destinasi wisata.</p>
+                        @endforelse
+                    </div>
+
+                    <!-- Row 2 -->
+                    @if (!empty($wisataRow2?->gambar))
+                        <img class="h-[150px] lg:h-[300px] w-full object-cover shadow-lg rounded-lg lg:rounded-2xl"
+                            src="{{ asset($wisataRow2->gambar) }}" alt="{{ $wisataRow2->cardTitle }}">
+                    @endif
+
+                </div>
+            </div>
+        @endif
 
 
         <div class="lg:pt-[80px] pt-[20px] mb-12">

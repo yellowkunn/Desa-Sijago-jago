@@ -28,8 +28,8 @@ Route::get('/informasi-kontak', [PageController::class, 'informasiKontak'])->nam
 
 
 //login
-Route::get('/loginadmin', [LoginController::class, 'index'])->name('login');
-Route::post('/loginadmin', [LoginController::class, 'login']);
+Route::get('/login', [LoginController::class, 'index'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 /*

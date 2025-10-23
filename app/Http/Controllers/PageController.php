@@ -23,7 +23,7 @@ class PageController extends Controller
         $kontak = Kontak::latest()->first();
 
         $wisataRow1 = DestinasiWisata::whereNotNull('cardTitle')->latest()->take(3)->get();
-        $wisataRow2 = DestinasiWisata::latest()->skip(3)->take(1)->first();
+        $wisataRow2 = DestinasiWisata::latest()->skip(4)->take(1)->first();
         $paketwisata = PaketWisata::latest()->skip(1)->take(4)->get();
 
         return view('pages.dashboard', compact(

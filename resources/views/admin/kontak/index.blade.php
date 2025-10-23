@@ -1,13 +1,18 @@
 @extends('../components.mainadmin')
 @section('container')
     <div class="sm:ml-64">
-        <div class="w-full h-[50vh] relative overflow-hidden">
+    <div class="w-full h-[45vh] lg:h-[90vh] relative overflow-hidden">
             <img src="{{ asset($kontak->background) }}" class="w-full h-full object-cover absolute top-0 left-0 z-0 brightness-75"
                 alt="Background">
         </div>
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-4 mb-4 rounded-lg">
                 {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class=" bg-red-100 text-red-700 p-4 mb-4 rounded-lg">
+                {{ session('error') }}
             </div>
         @endif
         <div class="lg:pt-[150px] pt-12">
