@@ -12,8 +12,10 @@ class AboutUsController extends Controller
      */
     public function index()
     {
+        $title = AboutUs::latest()->value('title');
+        $background = AboutUs::latest()->value('background');
         $about = AboutUs::first();
-        return view('admin.about.index', compact('about'));
+        return view('admin.about.index', compact('about', 'title', 'background'));
     }
 
     public function edit()
@@ -74,11 +76,9 @@ class AboutUsController extends Controller
             $about->save();
 
             return redirect()->route('dashboard.index')->with('success', 'Data berhasil diperbarui');
-
         } catch (\Exception $e) {
 
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-            
         }
     }
 }

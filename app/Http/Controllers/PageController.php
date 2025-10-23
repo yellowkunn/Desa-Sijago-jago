@@ -40,9 +40,11 @@ class PageController extends Controller
 
     public function tentangKami()
     {
+        $title = AboutUs::latest()->value('title');
+        $background = AboutUs::latest()->value('background');
         $about = AboutUs::first();
         $kontak = Kontak::latest()->first();
-        return view('pages.tentangkami', compact('about', 'kontak'));
+        return view('pages.tentangkami', compact('about', 'kontak', 'title', 'background'));
     }
 
     public function destinasiWisata()
@@ -97,7 +99,8 @@ class PageController extends Controller
     {
         $title = Kontak::latest()->value('title');
         $kontak = Kontak::latest()->first();
-        return view('pages.informasikontak', compact('title', 'kontak'));
+        $background = Kontak::latest()->value('background');
+        return view('pages.informasikontak', compact('title', 'kontak', 'background'));
     }
 
     public function Kontak()

@@ -11,7 +11,8 @@ class KontakController extends Controller
     {
         $title = Kontak::latest()->value('title');
         $kontak = Kontak::latest()->first();
-        return view('admin.kontak.index', compact('kontak', 'title'));
+        $background = Kontak::latest()->value('background');
+        return view('admin.kontak.index', compact('kontak', 'title', 'background'));
     }
 
     public function edit()
