@@ -35,7 +35,7 @@
         </div>
 
         {{-- TENTANG SECTION --}}
-        <div class="lg:pt-[150px]">
+        <div class="lg:pt-[100px]">
             <div class="max-w-7xl mx-auto px-4 sm:px-0 md:px-8 2xl:px-0">
 
                 {{-- Tombol Edit Section --}}
