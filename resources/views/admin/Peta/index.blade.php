@@ -2,7 +2,7 @@
 @section('container')
     <div class="sm:ml-64">
     <div class="w-full h-[200px] lg:h-[300px]">
-        <img src="{{ asset($about->background) }}" class="w-full h-full object-cover brightness-75" alt="Background">
+        <img src="{{ asset($background) }}" class="w-full h-full object-cover brightness-75" alt="Background">
     </div>
 
         @if (session('success'))
