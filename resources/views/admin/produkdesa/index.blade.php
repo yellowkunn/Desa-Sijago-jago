@@ -1,9 +1,8 @@
 @extends('../components.mainadmin')
 @section('container')
     <div class="sm:ml-64">
-    <div class="w-full lg:h-[50vh] h-[25vh] relative overflow-hidden">
-        <img src="{{ asset($background) }}" class="w-full h-full object-cover absolute top-0 left-0 z-0 brightness-75"
-            alt="Background">
+    <div class="w-full h-[200px] lg:h-[300px]">
+        <img src="{{ asset($about->background) }}" class="w-full h-full object-cover brightness-75" alt="Background">
     </div>
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-4 mb-4 rounded-lg">
