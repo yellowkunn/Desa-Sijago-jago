@@ -75,7 +75,7 @@ class AboutUsController extends Controller
 
             $about->save();
 
-            return redirect()->route('dashboard.index')->with('success', 'Data berhasil diperbarui');
+            return redirect()->route('about.index')->with('success', 'Data berhasil diperbarui');
         } catch (\Exception $e) {
 
             return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
